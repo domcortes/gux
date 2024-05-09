@@ -3,10 +3,8 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Exception;
 use Illuminate\Http\Request;
-use Tymon\JWTAuth\Exceptions\TokenExpiredException;
-use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class JwtMiddleware
@@ -21,25 +19,19 @@ class JwtMiddleware
     public function handle(Request $request, Closure $next)
     {
         try {
-            JWTAuth::parseToken()->authenticate();
-        } catch (Exception $th) {
-            $status = 'Token no disponible en solicitud';
-            $returnCode = 401;
-
-            if ($th instanceof TokenInvalidException) {
-                $status = 'Token invalido';
-                $returnCode = 400;
+            $user = JWTAuth::parseToken()->authenticate();
+        } catch (JWTException $e) {
+            if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
+                return response()->json(['error' => 'Token inválido'], 401);
+            } elseif ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
+                return response()->json(['error' => 'Token expirado'], 401);
+            } else {
+                return response()->json(['error' => 'Token de autenticación no encontrado'], 401);
             }
-
-            if($th instanceof TokenExpiredException){
-                $status = 'Token expirado';
-                $returnCode = 400;
-            }
-
-            return response()->json([
-                'status' => $status,
-            ], $returnCode);
         }
+
+        $request->merge(['authenticated_user' => $user]);
+
         return $next($request);
     }
 }

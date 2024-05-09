@@ -7,60 +7,68 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+## Sobre esta modificacion de readme
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Esta actualizacion de readme fue realizada mediante un branch llamado `feature/modificacion_de_readme`, tratado como feature para mostrar el manejo de [GitFlow]
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Installation
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. Crear una base de datos llamada `gux`.
+2. Ejecutar `composer install` para instalar las dependencias de PHP.
+3. Ejecutar `npm install` o `yarn install` según corresponda para instalar las dependencias de Node.js.
+4. Ejecutar las migraciones para crear las tablas de la base de datos con el comando `php artisan migrate`.
+5. Ejecutar los seeders para poblar la base de datos con datos de prueba utilizando el comando `php artisan db:seed`.
+6. En caso de que no se ejecute el seeder por algun tipo de configuracion, prueba utilizando el comando `php artisan db:seed --class=CountriesTableSeeder`.
 
-## Learning Laravel
+## Endpoints de Prueba
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### En la rama main:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- Crear usuario:
+  - Método: POST
+  - Endpoint: `https://gux:8890/api/register`
+  - Parámetros del formulario: `name`, `email`, `password`, `password_confirmation`
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- Iniciar sesión y obtener token JWT:
+  - Método: POST
+  - Endpoint: `https://gux:8890/api/login`
+  - Parámetros del formulario: `email`, `password`
 
-## Laravel Sponsors
+- Obtener los amiibo:
+  - Método: GET
+  - Endpoint: `https://gux:8890/api/amiibo/list`
+  - Encabezado de Autorización: `Bearer [TOKEN_JWT_OBTENIDO_EN_LOGIN]`
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+- Obtener los usuarios:
+  - Método: GET
+  - Endpoint: `https://gux:8890/api/users/list`
+  - Encabezado de Autorización: `Bearer [TOKEN_JWT_OBTENIDO_EN_LOGIN]`
 
-### Premium Partners
+### En la rama feature/optimizacion_de_consultas:
+- En esta rama contamos con algunos endpoints y configuraciones adicionales
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+- Crear usuario:
+  - Método: POST
+  - Endpoint: `https://gux:8890/api/register`
+  - Parámetros del formulario: `name`, `email`, `password`, `password_confirmation`, `country` 
+  - en el parametro country, colocar un numero, de lo contrario, la validacion fallara 
 
-## Contributing
+- Iniciar sesión y obtener token JWT:
+  - Método: POST
+  - Endpoint: `https://gux:8890/api/login`
+  - Parámetros del formulario: `email`, `password`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- Obtener los amiibo:
+  - Método: GET
+  - Endpoint: `https://gux:8890/api/amiibo/list`
+  - Encabezado de Autorización: `Bearer [TOKEN_JWT_OBTENIDO_EN_LOGIN]`
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- Obtener los usuarios:
+  - Método: GET
+  - Endpoint: `https://gux:8890/api/users/list`
+  - Encabezado de Autorización: `Bearer [TOKEN_JWT_OBTENIDO_EN_LOGIN]`
+  
+- Obtener los paises:
+  - Método: GET
+  - Endpoint: `https://gux:8890/api/countries/list`
+  - Encabezado de Autorización: `Bearer [TOKEN_JWT_OBTENIDO_EN_LOGIN]`

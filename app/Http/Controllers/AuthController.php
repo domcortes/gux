@@ -6,6 +6,7 @@ use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -18,7 +19,7 @@ class AuthController extends Controller
             [
                 'email' => 'required|email|max:255|unique:users',
                 'name' => 'required|max:255',
-                'password' => 'required|min:6|confirmed',
+                'password' => 'required|min:6|confirmed|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]+$/',
                 'country' => 'required'
             ]
         );
@@ -44,16 +45,18 @@ class AuthController extends Controller
 
         try {
             if (!$token = JWTAuth::attempt($credentials)) {
+                Log::warning('Intento de inicio de sesión fallido para el usuario: ' . $credentials['email']);
+
                 return response()->json(
-                    [
-                        'error' => 'Credenciales invalidas'
-                    ],
+                    ['error' => 'Credenciales inválidas o usuario no encontrado'],
                     400
                 );
             }
         } catch (JWTException $th) {
+            Log::error('Error al generar el token JWT: ' . $th->getMessage());
+
             return response()->json([
-                'error' => 'Token no asignado a usuario'
+                'error' => 'Error al generar el token JWT'
             ], 500);
         }
 
