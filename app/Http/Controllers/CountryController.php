@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Countries;
-use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 
 class CountryController extends Controller
 {
@@ -13,7 +14,11 @@ class CountryController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function index(){
+    public function index()
+    {
+        $countries = Cache::remember('countries', 1, function () {
+            return Countries::select('name')->get();
+        });
         $countries = Countries::select('name')->get();
         return response()->json($countries);
     }
