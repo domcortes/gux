@@ -18,14 +18,16 @@ class AuthController extends Controller
             [
                 'email' => 'required|email|max:255|unique:users',
                 'name' => 'required|max:255',
-                'password' => 'required|min:6|confirmed'
+                'password' => 'required|min:6|confirmed',
+                'country' => 'required'
             ]
         );
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
+            'country_id' => $request->country
         ]);
 
         $jwtToken = JWTAuth::fromUser($user);

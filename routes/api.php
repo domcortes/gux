@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\AmiiboController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CountryController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,6 +27,10 @@ Route::middleware('jwt.verification')->group(function () {
 
     Route::group(['prefix' => 'amiibo'], function(){
         Route::get('list', [AmiiboController::class, 'index']);
+    });
+
+    Route::group(['prefix' => 'countries'], function(){
+        Route::get('list', [CountryController::class, 'index']);
     });
 });
 
